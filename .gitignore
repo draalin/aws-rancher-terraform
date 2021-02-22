@@ -120,11 +120,17 @@ override.tf.json
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
 
+# TF Provider / Lock files
+.terraform
+.terraform.lock.hcl
+
+# TF Secrets
+secrets.auto.tfvars
+
+# Ignore kubernetes files
+kube_config_server.yaml
+
+# Ignore EC2 PEMs
 devops
 devops.pem
 devops.pub
-
-secrets.auto.tfvars
-.terraform
-
-kube_config_server.yaml
