@@ -31,16 +31,6 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-data "helm_repository" "rancher_stable" {
-  name = "rancher-stable"
-  url  = "https://releases.rancher.com/server-charts/stable/"
-}
-
-data "helm_repository" "jetstack" {
-  name = "jetstack"
-  url  = "https://charts.jetstack.io"
-}
-
 data "template_file" "cloud_config" {
   template = file("${path.module}/files/cloud-config.yaml")
 }
