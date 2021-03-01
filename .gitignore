@@ -134,3 +134,10 @@ kube_config_server.yaml
 devops
 devops.pem
 devops.pub
+
+# Keys
+id_rsa
+id_rsa.pub
+
+# Kube Config
+kube_config_cluster.yml
