@@ -22,6 +22,7 @@ repos:
   - id: terraform_fmt
   - id: terraform_docs
   - id: terraform_docs_replace
+    args: ['--sort-by-required', '--dest=TERRAFORM_DOCS.md']
   - id: terraform_tflint
   - id: terraform_tfsec
   - id: terraform_validate
