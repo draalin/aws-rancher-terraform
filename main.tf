@@ -3,39 +3,41 @@ resource "random_id" "rancher" {
 }
 
 resource "aws_security_group" "rancher_elb" {
-  name   = "${local.project_name}-rancher-elb"
-  vpc_id = var.vpc_id
+  name        = "${local.project_name}-rancher-elb"
+  description = "Rancher Load Balancer"
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS009
   }
 }
 
 resource "aws_security_group" "rancher" {
-  name   = "${local.project_name}-rancher-server"
-  vpc_id = var.vpc_id
+  name        = "${local.project_name}-rancher-server"
+  description = "Rancher Master Node"
+  vpc_id      = var.vpc_id
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
   ingress {
@@ -56,7 +58,7 @@ resource "aws_security_group" "rancher" {
     from_port   = 6443
     to_port     = 6443
     protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS008
   }
 
   ingress {
@@ -70,7 +72,7 @@ resource "aws_security_group" "rancher" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] #tfsec:ignore:AWS009
   }
 }
 
@@ -83,7 +85,7 @@ resource "aws_instance" "rancher-master" {
 
   vpc_security_group_ids      = [aws_security_group.rancher.id]
   subnet_id                   = element(tolist(data.aws_subnet_ids.available.ids), 0)
-  associate_public_ip_address = true
+  associate_public_ip_address = true #tfsec:ignore:AWS012
 
   root_block_device {
     volume_type = "gp2"
@@ -95,6 +97,7 @@ resource "aws_instance" "rancher-master" {
   }
 }
 
+#tfsec:ignore:AWS005
 resource "aws_elb" "rancher" {
   name            = local.project_name
   subnets         = data.aws_subnet_ids.available.ids
@@ -289,7 +292,7 @@ resource "rancher2_bootstrap" "admin" {
 resource "rke_cluster" "rancher_server" {
   depends_on = [null_resource.wait_for_docker]
 
-  dynamic nodes {
+  dynamic "nodes" {
     for_each = aws_instance.rancher-master
     content {
       address          = nodes.value.public_ip
