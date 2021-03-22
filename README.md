@@ -1,10 +1,16 @@
 # AWS Highly available Rancher
-
 Highly available Rancher setup with Terraform on AWS.
 
 ## Requirements
 - An AWS account
-- Minimum of Terraform version 13 and have setup the `provider.tf` and `variables.tf` with your preferred configuration.
+- Minimum of Terraform version 14 and have setup the `provider.tf` and `variables.tf` with your preferred configuration.
+
+## Terraform Documentation
+You can find additional information [here](TERRAFORM_DOCS.md) on the Terraform:
+- Requirements
+- Providers
+- Inputs
+- Outputs
 
 ## How to run
 Initialize providers
